@@ -1,8 +1,15 @@
+import telebot
+from dotenv import load_dotenv
 import os
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
 
-env_path = Path(".") / ".env"
-load_dotenv(dotenv_path=env_path, verbose=True)
-print(os.getenv("TG_BOT_TOKEN1"))
-#wef
+load_dotenv()
+
+TgBotToken = os.getenv('TG_BOT_TOKEN1')
+
+TgBot = telebot.TeleBot(TgBotToken)
+
+# Функція для обробки команди /start
+@TgBot.message_handler(commands=['start'])
+def handle_start(message):
+    TgBot.send_message(message.chat.id, "Привіт! Я твій особистий органайзер.")
+
