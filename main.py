@@ -13,3 +13,4 @@ TgBot = telebot.TeleBot(TgBotToken)
 def handle_start(message):
     TgBot.send_message(message.chat.id, "Привіт! Я твій особистий органайзер.")
 
+TgBot.polling()
