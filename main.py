@@ -4,13 +4,26 @@ import os
 
 load_dotenv()
 
-TgBotToken = os.getenv('TG_BOT_TOKEN1')
+tgBotToken = os.getenv('TG_BOT_TOKEN1')
 
-TgBot = telebot.TeleBot(TgBotToken)
+TgBot = telebot.TeleBot(tgBotToken)
 
-# Функція для обробки команди /start
+def SaveChatID(chat_id):
+    with open("chat_id.txt", "w") as file:
+        file.write(str(chat_id))
+        
+def LoadChatID():
+    try:
+        with open("chat_id.txt", "r") as file:
+            return int(file.read().strip())
+    except FileNotFoundError:
+        return None
+
 @TgBot.message_handler(commands=['start'])
-def handle_start(message):
-    TgBot.send_message(message.chat.id, "Привіт! Я твій особистий органайзер.")
+def HandleStart(message):
+    ChatID = message.chat.id
+    SaveChatID(ChatID)
+    TgBot.send_message(ChatID, "Привіт! Я твій особистий органайзер.")
 
 TgBot.polling()
+
