@@ -1,4 +1,6 @@
 .env
 chat_id.txt
-lasmsg.txt
 old.py
+lastMessage.txt
+test1.py
+__pycache__/
