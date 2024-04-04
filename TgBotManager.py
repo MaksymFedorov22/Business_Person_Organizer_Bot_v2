@@ -51,7 +51,7 @@ class TgBotManager:
             if updates['result']:
                 for item in updates['result']:
                     update_id = item['update_id']
-            if last_update_id is None or update_id >= last_update_id:
-                last_update_id = update_id + 1
-                set_key('.env', 'OFFSET', str(last_update_id))
+                if last_update_id is None or update_id >= last_update_id:
+                    last_update_id = update_id + 1
+                    set_key('.env', 'OFFSET', str(last_update_id))
 
