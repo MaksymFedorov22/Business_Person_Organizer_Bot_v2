@@ -1,41 +1,65 @@
 import TgBotManager
 import TgBotEvent
+import TgBotTask
 import sqlite3
 
 conn = sqlite3.connect("test1.db")
 
-bot1 = TgBotManager.TgBotManager()
-eventManager = TgBotEvent.TgBotEvent(bot1)
+botManager = TgBotManager.TgBotManager()
+eventManager = TgBotEvent.TgBotEvent(botManager)
+taskManager = TgBotTask.TgBotTask(botManager)
 
 commands = {}
 
 def MessageStart(msg):
     chat_id = msg['chat']['id']
-    message = '''
-Hello, It is the Organizer For A Business Person Bot.
-Type any of the commands to get started!
-'''
-    bot1.SendMessage(chat_id, message)
+    message = """
+🎉 Welcome to the Organizer Bot! 🎉
+
+I'm here to help you stay on top of your business activities. With this bot, you can:
+
+- Set up events, from one-time planned events to daily, weekly, monthly, and yearly recurring events
+- Manage your tasks, including tasks with descriptions and task lists
+- Reset your events and tasks
+- List all your upcoming events and current tasks
+- Remove specific events or tasks
+
+To get started, simply type any of the available commands. You can also type /help to see the full list of commands.
+
+Let's get organized and productive together! 💪
+"""
+    botManager.SendMessage(chat_id, message)
     MessageHelp(msg)
     return 0
 
 def MessageHelp(msg):
     chat_id = msg['chat']['id']
     help_message = """
-Available commands:
+Here are the available commands:
+
 /start - Display the main menu
-/planedevent <event_name> <event_date> - Set a planned event with the specified name and date
-/dailyevent <event_name> <event_start_date> <event_time> - Set a daily event with the specified name, start date, and time
-/weeklyevent <event_name> <event_start_date> <event_time> - Set a weekly event with the specified name, start date, and time
-/monthlyevent <event_name> <event_start_date> <event_time> - Set a monthly event with the specified name, start date, and time
-/yearlyevent <event_name> <event_start_date> <event_time> - Set a yearly event with the specified name, start date, and time
-/reset - Reset all your events
-/list - List all your events
-/remove <event_number> - Remove a specific event
+/event <event_name> <event_date> - Set a planned event
+/dailyevent <event_name> <event_start_date> <event_time> - Set a daily event
+/weeklyevent <event_name> <event_start_date> <event_time> - Set a weekly event
+/monthlyevent <event_name> <event_start_date> <event_time> - Set a monthly event
+/yearlyevent <event_name> <event_start_date> <event_time> - Set a yearly event
+/resetevents - Reset all your events
+/listevents - List all your events
+/removeevent <event_number> - Remove a specific event
+/task <task_name> - Add a new task
+/descriptiontask <task_name> <task_description> - Add a task with description
+/listtask <task_name> <task_list> - Add a task with a list of items
+/resettasks - Reset all your tasks
+/listtasks - List all your tasks
+/showtask <task_number> - Show details of a specific task
+/removetask <task_number> - Remove a specific task
 /help - Display this help message
+
+Feel free to use any of these commands to stay organized and on top of your business activities!
 """
-    bot1.SendMessage(chat_id, help_message)
+    botManager.SendMessage(chat_id, help_message)
     return 0
+
 
 def AddCommand(command, fnName):
     commands[command] = fnName
@@ -43,6 +67,7 @@ def AddCommand(command, fnName):
 
 def InitDb(conn):
     eventManager.InitDbTable(conn)
+    taskManager.InitDbTable(conn)
     return 0
 
 def GetJsonTag(json, tag):
@@ -79,25 +104,35 @@ def MessageHandler(updates):
                     break
             if (not fProcessed):
                 chat_id = item['message']['chat']['id']
-                bot1.SendMessage(chat_id, f'incorrect command {txtMessage}')
+                botManager.SendMessage(chat_id, f'incorrect command {txtMessage}')
     return 0
 
 def main():
     InitDb(conn)
-    bot1.SetLoop(MessageHandler)
+    botManager.SetLoop(MessageHandler)
+    # Basic commands
     AddCommand("/start", MessageStart)
     AddCommand("/help", MessageHelp)
-    #AddCommand("/timer3", eventManager.SetTimer3)
-    AddCommand("/reset", eventManager.ResetEvents)
-    AddCommand("/list", eventManager.ListEvents)
-    AddCommand("/remove", eventManager.RemoveEvent)
-    AddCommand("/planedevent", eventManager.SetPlannedEvent)
+    # Event commands
+    #AddCommand("/timer3event", eventManager.SetTimer3)
+    AddCommand("/resetevents", eventManager.ResetEvents)
+    AddCommand("/listevents", eventManager.ListEvents)
+    AddCommand("/removeevent", eventManager.RemoveEvent)
+    AddCommand("/event", eventManager.SetPlannedEvent)
     AddCommand("/dailyevent", eventManager.SetDailyEvent)
     AddCommand("/weeklyevent", eventManager.SetWeeklyEvent)
     AddCommand("/monthlyevent", eventManager.SetMonthlyEvent)
     AddCommand("/yearlyevent", eventManager.SetYearlyEvent)
+    # Task commands
+    AddCommand("/resettasks", taskManager.ResetTasks)
+    AddCommand("/listtasks", taskManager.ListTasks)
+    AddCommand("/showtask", taskManager.ShowTask)
+    AddCommand("/removetask", taskManager.RemoveTask)
+    AddCommand("/task", taskManager.AddNoDescriptionTask)
+    AddCommand("/descriptiontask", taskManager.AddDescriptionTask)
+    AddCommand("/listtask", taskManager.AddListTask)
     #
-    bot1.Start()
+    botManager.Start()
 
 if __name__ == '__main__':
     main()

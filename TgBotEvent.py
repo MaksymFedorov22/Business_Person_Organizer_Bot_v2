@@ -64,7 +64,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if not len(args) == 1:
-            self.botManager.SendMessage(chat_id, "Please provide the event number in the format: /remove <event_number>")
+            self.botManager.SendMessage(chat_id, "Please provide the event number in the format: /removeevent <event_number>")
             return 0
         number = int(args[0])
         if len(rows) == 0:
@@ -76,8 +76,8 @@ class TgBotEvent:
                 return 0
             else:
                 row = rows[number - 1]
-                delete_query = "DELETE FROM events WHERE chatID = ? AND eventName = ? AND eventTime = ?"
-                curr.execute(delete_query, (chat_id, row[2], row[3]))
+                delete_query = "DELETE FROM events WHERE chatID = ? AND eventType = ? AND eventName = ? AND eventTime = ?"
+                curr.execute(delete_query, (chat_id, row[1], row[2], row[3]))
                 self.conn.commit()
                 self.botManager.SendMessage(chat_id,f"Event {row[2]} removed")
         return 0
@@ -114,7 +114,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id, "Please provide the event name and date in the format: /planedevent <event_name> <event_date>")
+            self.botManager.SendMessage(chat_id, "Please provide the event name and date in the format: /event <event_name> <event_date>")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])
