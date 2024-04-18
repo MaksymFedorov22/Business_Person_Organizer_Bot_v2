@@ -3,7 +3,7 @@ import TgBotEvent
 import TgBotTask
 import sqlite3
 
-conn = sqlite3.connect("test1.db")
+conn = sqlite3.connect("bot1.db")
 
 botManager = TgBotManager.TgBotManager()
 eventManager = TgBotEvent.TgBotEvent(botManager)
@@ -38,24 +38,24 @@ def MessageHelp(msg):
 Here are the available commands:
 
 /start - Display the main menu
-/event <event_name> <event_date> - Set a planned event
-/dailyevent <event_name> <event_start_date> <event_time> - Set a daily event
-/weeklyevent <event_name> <event_start_date> <event_time> - Set a weekly event
-/monthlyevent <event_name> <event_start_date> <event_time> - Set a monthly event
-/yearlyevent <event_name> <event_start_date> <event_time> - Set a yearly event
+/event event_name event_date - Set a planned event (event_name without spaces)
+/dailyevent event_name event_start_date event_time - Set a daily event (event_name without spaces)
+/weeklyevent event_name event_start_date event_time - Set a weekly event (event_name without spaces)
+/monthlyevent event_name event_start_date event_time - Set a monthly event (event_name without spaces)
+/yearlyevent event_name event_start_date event_time - Set a yearly event (event_name without spaces)
 /resetevents - Reset all your events
 /listevents - List all your events
-/removeevent <event_number> - Remove a specific event
-/task <task_name> - Add a new task
-/descriptiontask <task_name> <task_description> - Add a task with description
-/listtask <task_name> <task_list> - Add a task with a list of items
+/removeevent event_number - Remove a specific event
+/task task_name - Add a new task (task_name without spaces)
+/descriptiontask task_name task_description - Add a task with description (task_name without spaces)
+/listtask task_name task_list - Add a task with a list of items (task_name without spaces)
 /resettasks - Reset all your tasks
 /listtasks - List all your tasks
-/showtask <task_number> - Show details of a specific task
-/removetask <task_number> - Remove a specific task
+/showtask task_number - Show details of a specific task
+/removetask task_number - Remove a specific task
 /help - Display this help message
 
-Feel free to use any of these commands to stay organized and on top of your business activities!
+Feel free to use any of these commands to stay organized and on top of your business activities! Remember, all names (event_name and task_name) must be provided without spaces.
 """
     botManager.SendMessage(chat_id, help_message)
     return 0

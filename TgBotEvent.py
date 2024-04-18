@@ -1,9 +1,9 @@
 # 0 - /timer3: Set a timer for 3 minutes.
-# 1 - /planedevent <event_name> <event_date>: Set a planned event with the specified name and date.
-# 2 - /dailyevent <event_name> <event_start_date> <event_time>: Set a daily event with the specified name, start date, and time.
-# 3 - /weeklyevent <event_name> <event_start_date> <event_time>: Set a weekly event with the specified name, start date, and time.
-# 4 - /monthlyevent <event_name> <event_start_date> <event_time>: Set a monthly event with the specified name, start date, and time.
-# 5 - /yearlyevent <event_name> <event_start_date> <event_time>: Set a yearly event with the specified name, start date, and time.
+# 1 - /planedevent event_name event_date: Set a planned event with the specified name and date.
+# 2 - /dailyevent event_name event_start_date event_time: Set a daily event with the specified name, start date, and time.
+# 3 - /weeklyevent event_name event_start_date event_time: Set a weekly event with the specified name, start date, and time.
+# 4 - /monthlyevent event_name event_start_date event_time: Set a monthly event with the specified name, start date, and time.
+# 5 - /yearlyevent event_name event_start_date event_time: Set a yearly event with the specified name, start date, and time.
 
 import sqlite3
 from datetime import datetime, timedelta
@@ -13,7 +13,7 @@ class TgBotEvent:
     # Basic methods
     def __init__(self, botManager):
         self.botManager = botManager
-        self.conn = sqlite3.connect("test1.db")
+        self.conn = sqlite3.connect("bot1.db")
 
     def InitDbTable(self, conn):
         
@@ -64,7 +64,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if not len(args) == 1:
-            self.botManager.SendMessage(chat_id, "Please provide the event number in the format: /removeevent <event_number>")
+            self.botManager.SendMessage(chat_id, "Please provide the event number in the format: /removeevent event_number")
             return 0
         number = int(args[0])
         if len(rows) == 0:
@@ -114,7 +114,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id, "Please provide the event name and date in the format: /event <event_name> <event_date>")
+            self.botManager.SendMessage(chat_id, "Please provide the event name (without spaces) and date in the format: /event event_name event_date")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])
@@ -133,7 +133,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id,"Please provide the event name, date and time in the format: /dailyevent <event_name> <event_start_date> <event_time>")
+            self.botManager.SendMessage(chat_id,"Please provide the event name (without spaces), date and time in the format: /dailyevent event_name event_start_date event_time")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])
@@ -151,7 +151,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id,"Please provide the event name, date and time in the format: /weeklyevent <event_name> <event_start_date> <event_time>")
+            self.botManager.SendMessage(chat_id,"Please provide the event name (without spaces), date and time in the format: /weeklyevent event_name event_start_date event_time")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])
@@ -169,7 +169,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id,"Please provide the event name, date and time in the format: /monthlyevent <event_name> <event_start_date> <event_time>")
+            self.botManager.SendMessage(chat_id,"Please provide the event name (without spaces), date and time in the format: /monthlyevent event_name event_start_date event_time")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])
@@ -187,7 +187,7 @@ class TgBotEvent:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id,"Please provide the event name, date and time in the format: /yearlyevent <event_name> <event_start_date> <event_time>")
+            self.botManager.SendMessage(chat_id,"Please provide the event name (without spaces), date and time in the format: /yearlyevent event_name event_start_date event_time")
             return 0
         eventName = args[0]
         strEventDate = ' '.join(args[1:])

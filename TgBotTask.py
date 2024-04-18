@@ -1,6 +1,6 @@
-# 1 - /addtask <task_name>
-# 2 - /adddescriptiontask <task_name> <task_description>
-# 3 - /addlisttask <task_name> <task_list>
+# 1 - /addtask task_name
+# 2 - /adddescriptiontask task_name task_description
+# 3 - /addlisttask task_name task_list
 
 import sqlite3
 
@@ -8,7 +8,7 @@ class TgBotTask:
     # Basic methods
     def __init__(self, botManager):
         self.botManager = botManager
-        self.conn = sqlite3.connect("test1.db")
+        self.conn = sqlite3.connect("bot1.db")
 
     def InitDbTable(self, conn):
         curr = conn.cursor()
@@ -58,7 +58,7 @@ class TgBotTask:
         text = msg['text']
         command, *args = text.split()
         if not len(args) == 1:
-            self.botManager.SendMessage(chat_id, "Please provide the task number in the format: /showtask <task_number>")
+            self.botManager.SendMessage(chat_id, "Please provide the task number in the format: /showtask task_number")
             return 0
         number = int(args[0])
         if len(rows) == 0:
@@ -87,7 +87,7 @@ class TgBotTask:
         text = msg['text']
         command, *args = text.split()
         if not len(args) == 1:
-            self.botManager.SendMessage(chat_id, "Please provide the task number in the format: /removetask <task_number>")
+            self.botManager.SendMessage(chat_id, "Please provide the task number in the format: /removetask task_number")
             return 0
         number = int(args[0])
         if len(rows) == 0:
@@ -120,7 +120,7 @@ class TgBotTask:
         text = msg['text']
         command, *args = text.split()
         if not len(args) == 1:
-            self.botManager.SendMessage(chat_id, "Please provide the task name in the format: /task <task_name>")
+            self.botManager.SendMessage(chat_id, "Please provide the task name (without spaces) in the format: /task task_name")
             return 0
         taskName = args[0]
         taskDescription = ' '
@@ -133,7 +133,7 @@ class TgBotTask:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 2:
-            self.botManager.SendMessage(chat_id, "Please provide the task name and description in the format: /adddescriptiontask <task_name> <task_description>")
+            self.botManager.SendMessage(chat_id, "Please provide the task name (without spaces) and description in the format: /adddescriptiontask task_name task_description")
             return 0
         taskName = args[0]
         taskDescription = ' '.join(args[1:])
@@ -146,7 +146,7 @@ class TgBotTask:
         text = msg['text']
         command, *args = text.split()
         if len(args) < 3:
-            self.botManager.SendMessage(chat_id, "Please provide the task name and description in the format: /addlisttask <task_name> <task_list>")
+            self.botManager.SendMessage(chat_id, "Please provide the task name (without spaces) and description in the format: /addlisttask task_name task_list")
             return 0
         taskName = args[0]
         taskIteams = ' '.join(args[1:])
