@@ -2,6 +2,7 @@
 old.py
 test1.py
 __pycache__/
+Doc/
 bot.log
 test1.db
 bot1.db
