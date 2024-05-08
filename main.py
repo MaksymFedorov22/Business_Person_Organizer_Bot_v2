@@ -77,23 +77,23 @@ def GetJsonTag(json, tag):
         return json[tag]
     return None
 
-def GetJsonTagInt(json, tag0, tag1):
-    return GetJsonTag(GetJsonTag(json, tag0), tag1)
-
-def GetJsonTagInt(json, tag0, tag1, tag2):
-    return GetJsonTag(GetJsonTag(GetJsonTagInt(json, tag0), tag1), tag2)
-
+def GetJsonTagInt(json, tag0, tag1, tag2=None):
+    if tag2 is None:
+        return GetJsonTag(GetJsonTag(json, tag0), tag1)
+    else:
+        return GetJsonTag(GetJsonTag(GetJsonTagInt(json, tag0), tag1), tag2)
+    
 def MessageHandler(updates):
     eventManager.ProcessAllEvents()
     if GetJsonTag(updates, 'result'):
-        for item in updates['result']:
+        for item in GetJsonTag(updates, 'result'):
             #message = item['message']['text']
             if 'message' in item:
-                message = item['message']
-                txtMessage = item['message']['text']
+                message = GetJsonTag(item, 'message')
+                txtMessage = GetJsonTagInt(item, 'message', 'text')
             elif 'edited_message' in item:
-                message = item['edited_message']
-                txtMessage = item['edited_message']['text']
+                message = GetJsonTag(item, 'edited_message')
+                txtMessage = GetJsonTagInt(item, 'edited_message', 'text')
             else:
                 continue
             fProcessed = False
@@ -103,7 +103,7 @@ def MessageHandler(updates):
                     fProcessed = True
                     break
             if (not fProcessed):
-                chat_id = item['message']['chat']['id']
+                chat_id = GetJsonTagInt(item, 'message', 'chat', 'id')
                 botManager.SendMessage(chat_id, f'incorrect command {txtMessage}')
     return 0
 
